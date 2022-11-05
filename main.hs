@@ -1,9 +1,7 @@
-source::String
-source="-> ( a b )"
+source = "-> a b"
 
-data no = no{operador :: String,operando1::no,operando2::no,val::Bool}
+b = words source
 
-no a ={"","",""}
-implication a b c =
+data Tree = Leaf String Bool | Node String Bool Tree Tree deriving (Show)
 
-logic x y z =
+main = putStrLn (b!!2)
