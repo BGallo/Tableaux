@@ -1,22 +1,15 @@
-data Data = Data { value :: String
-                 , isop  :: Bool
-                 , eval  :: Bool
-                 } deriving Show
-data 
+type Var    = String
+data Op = Nao | SeEntao | E | Ou | NaoOperador
+data Formula = Formula{operador :: Op, operandoUm::Formula,operandoDois::Formula,nome::String,valor::Bool} 
 
-create :: String -> Data
-create value
-    | value == "^" || value == "v" || value == "->" = Data {value = value, isop = True, eval = True}
-    | otherwise = Data {value = value, isop = False, eval = True}
+verdadeiro :: formula f ->formula x
+verdadeiro f
+    | operador f == NaoOperador = Formula{operador=NaoOperador,operandoUm= operandoUm f,operandoDois= operandoDois f,nome=nome f,valor = True} 
+    | operador f == Nao = falsificar Formula{operador=NaoOperador,operandoUm= foperandoUm f,operandoDois= operandoDois f,nome=nome f,valor =  valor  }
 
-build :: [Data] -> [Data]
-build op
-    | is == True  = [val, [build (tail op), build (tail (tail op))]] -- o mundo se isso funcionasse https://media.tenor.com/YHZLVDh63dwAAAAd/futuristic-city-star-trek-discovery.gif
-    | otherwise = [val]
-    where val = op !! 0
-          is  = isop  (op !! 0)
+falsificar :: formula f->formula x
 
-main = do
-    let source = words "-> a b"
-    let a = map create source
-    print(build a)
+falsificar f 
+    | operador f == NaoOperador = Formula{operador=NaoOperador,operandoUm= operandoUm f,operandoDois= operandoDois f,nome=nome f,valor = False} 
+    | operador f == Nao = Formula{operador=Nao,operandoUm= foperandoUm f,operandoDois= operandoDois f,nome=nome f,valor = ! valor f } 
+    | operador f == SeEntao = 
