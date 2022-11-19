@@ -26,7 +26,13 @@ fTree tree
     | otherwise = tree{eval = False}
     where opr = op(tree)
 
---evalTree :: Tree -> IO ()
+--branchCalc :: Tree -> Int -- calculates value of n in 2^n amount of branches
+--branchCalc tree
+
+--branchList :: Tree -> [Tree]
+--branchList tree
+
+--evalBranches :: Tree -> IO ()
 
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
