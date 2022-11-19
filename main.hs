@@ -19,7 +19,7 @@ vTree tree
 
 fTree :: Tree -> Tree
 fTree tree
-    | opr == "^" = tree{eval = False} -- TODO -- REGRA 4
+    | opr == "^" = tree{eval = False } -- TODO -- REGRA 4
     | opr == "v" = tree{eval = False, left = fTree $ left tree, right = fTree $ right tree} -- REGRA 6
     | opr == "->" = tree{eval = False, left = vTree $ left tree , right = fTree $ right tree } -- REGRA 2
     | opr == "~" = tree{eval = False, left = vTree $ left tree} -- REGRA 8
@@ -30,7 +30,7 @@ fTree tree
 
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
-    | opr == "^" || opr == "v" || opr == "->" = replicate count '-' ++ opr ++ "\n"-- ++ treeToStr(left(tree) (count + 1)) ++ treeToStr(right(tree) (count + 1))
+    | opr == "^" || opr == "v" || opr == "->" = replicate count '-' ++ opr ++ "\n" ++  left tree `treeToStr`  (count + 1) ++ right tree `treeToStr`  (count + 1)
     | opr == "~" = replicate count '-' ++ opr ++ "\n"-- ++ treeToStr(left(tree) (count + 1))
     | otherwise = replicate count '-' ++ opr ++ "\n"
     where opr = op(tree)
