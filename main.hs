@@ -1,7 +1,7 @@
 data Tree = Leaf {op :: String, eval :: Bool} | DBranch {op :: String, eval :: Bool, left :: Tree, right :: Tree} | SBranch {op :: String, eval :: Bool, left :: Tree} deriving Show
 
 buildTree :: String -> Tree
-buildTree formula = head (foldl pmatcher [] (reverse (words (formula))))
+buildTree formula = head $ foldl pmatcher [] $ reverse $ words $ formula
     where pmatcher(x:y:ys) "^" = (DBranch{op = "^", eval = True, left = x, right = y}):ys
           pmatcher(x:y:ys) "v" = (DBranch{op = "v", eval = True, left = x, right = y}):ys
           pmatcher(x:y:ys) "->" = (DBranch{op = "->", eval = True, left = x, right = y}):ys
