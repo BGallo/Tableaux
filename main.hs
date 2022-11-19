@@ -30,13 +30,13 @@ fTree tree
 
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
-    | opr == "^" || opr == "v" || opr == "->" = replicate count '-' ++ opr ++ "\n" ++  left tree `treeToStr`  (count + 1) ++ right tree `treeToStr`  (count + 1)
-    | opr == "~" = replicate count '-' ++ opr ++ "\n" ++  left tree `treeToStr`  (count + 1)
-    | otherwise = replicate count '-' ++ opr ++ "\n"
+    | opr == "^" || opr == "v" || opr == "->" = replicate count '-' ++ " " ++ opr ++ "\n" ++  left tree `treeToStr` (count + 2) ++ right tree `treeToStr` (count + 2)
+    | opr == "~" = replicate count '-' ++ " " ++ opr ++ "\n" ++  left tree `treeToStr` (count + 2)
+    | otherwise = replicate count '-' ++ " " ++ opr ++ "\n"
     where opr = op(tree)
 
 evalFormula :: String -> IO()
-evalFormula formula = putStr $ treeToStr (fTree $ buildTree formula) 0
+evalFormula formula = putStr $ treeToStr (fTree $ buildTree formula) 1
 
 main = do
     let formula = "-> a -> a -> b a"
