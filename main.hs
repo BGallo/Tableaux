@@ -31,7 +31,7 @@ fTree tree
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
     | opr == "^" || opr == "v" || opr == "->" = replicate count '-' ++ opr ++ "\n" ++  left tree `treeToStr`  (count + 1) ++ right tree `treeToStr`  (count + 1)
-    | opr == "~" = replicate count '-' ++ opr ++ "\n"-- ++ treeToStr(left(tree) (count + 1))
+    | opr == "~" = replicate count '-' ++ opr ++ "\n" ++  left tree `treeToStr`  (count + 1)
     | otherwise = replicate count '-' ++ opr ++ "\n"
     where opr = op(tree)
 
