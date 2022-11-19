@@ -10,21 +10,21 @@ buildTree formula = head $ foldl pmatcher [] $ reverse $ words $ formula
 
 vTree :: Tree -> Tree
 vTree tree
-    | opr == "^" = tree{eval = True, left = vTree $ left tree, right = vTree $ right tree} -- REGRA 3
-    | opr == "v" = tree{eval = True} -- TODO -- REGRA 5
-    | opr == "->" = tree{eval = True} -- TODO -- REGRA 1
+    | opr == "^" = tree{eval = True, left = vTree $ left tree, right = vTree $ right tree}-- REGRA 3
+    | opr == "v" = tree{eval = True,left = vTree $ left tree,right = vTree $ right tree} -- TODO -- REGRA 5
+    | opr == "->" = tree{eval = True,left = fTree $ left tree, right = vTree $ right tree} -- TODO -- REGRA 1
     | opr == "~" = tree{eval = True, left = fTree $ left tree} -- REGRA 7
     | otherwise = tree{eval = True}
-    where opr = op(tree)
+    where opr = op tree
 
 fTree :: Tree -> Tree
 fTree tree
-    | opr == "^" = tree{eval = False } -- TODO -- REGRA 4
+    | opr == "^" = tree{eval = False,left = fTree $ left tree,right = fTree $ right tree } -- TODO -- REGRA 4
     | opr == "v" = tree{eval = False, left = fTree $ left tree, right = fTree $ right tree} -- REGRA 6
     | opr == "->" = tree{eval = False, left = vTree $ left tree , right = fTree $ right tree } -- REGRA 2
     | opr == "~" = tree{eval = False, left = vTree $ left tree} -- REGRA 8
     | otherwise = tree{eval = False}
-    where opr = op(tree)
+    where opr = op tree
 
 --branchCalc :: Tree -> Int -- calculates value of n in 2^n amount of branches
 --branchCalc tree
@@ -40,8 +40,8 @@ treeToStr tree count
     | opr == "^" || opr == "v" = replicate count '-' ++ " " ++ opr ++ " : " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3) ++ right tree `treeToStr` (count + 3)
     | opr == "~" = replicate count '-' ++ " " ++ opr ++ " : " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3)
     | otherwise = replicate count '-' ++ " " ++ opr ++ " : " ++ show ev ++ "\n"
-    where opr = op(tree)
-          ev = eval(tree)
+    where opr = op tree
+          ev = eval tree
 
 evalFormula :: String -> IO()
 evalFormula formula = putStr $ treeToStr (fTree $ buildTree formula) 1
