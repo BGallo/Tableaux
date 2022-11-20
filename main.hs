@@ -1,3 +1,4 @@
+import Data.List
 
 data Tree = Leaf {op :: String, eval :: Bool} | DBranch {op :: String, eval :: Bool, left :: Tree, right :: Tree} | SBranch {op :: String, eval :: Bool, left :: Tree} deriving Show
 
@@ -34,16 +35,15 @@ fTree tree
 --branchList tree
 
 --evalBranches :: Tree -> IO ()
-avaliar :: Tree->String
-avaliar t  
-    | list !! ((opr `elem` list)+1) == not (eval t) = "Contradição" 
-    | (opr == "^" ) && ((eval t) == False) = (avaliar (left t))++(avaliar (right t))
-    | (opr == "^" ) && ((eval t) == True) = (avaliar t)
-    | (opr == "v" ) && ((eval t) == False) = (avaliar t)
-    | (opr == "v" ) && ((eval t) == True) = (avaliar t)++(avaliar t)
-    | (opr == "->" ) && ((eval t) == False) = (avaliar t)
+avaliar :: Tree->[String]->String
+avaliar t lista  
+    | lista !! ((opr `elemIndex` lista)+1) == not (eval t) = "Contradição" 
+    | (opr == "^" ) && ((eval t) == False) = (avaliar (left t) [])++(avaliar (right t) [])
+    | (opr == "^" ) && ((eval t) == True) = (avaliar t lista) ++ (avaliar t lista)
+    | (opr == "v" ) && ((eval t) == False) = (avaliar t lista) ++ (avaliar t lista)
+    | (opr == "v" ) && ((eval t) == True) = (avaliar t [])++(avaliar t [])
+    | (opr == "->" ) && ((eval t) == False) = (avaliar t lista)
     where opr = op t 
-          list = []
 
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
