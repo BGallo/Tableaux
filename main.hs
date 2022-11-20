@@ -1,7 +1,8 @@
+
 data Tree = Leaf {op :: String, eval :: Bool} | DBranch {op :: String, eval :: Bool, left :: Tree, right :: Tree} | SBranch {op :: String, eval :: Bool, left :: Tree} deriving Show
 
 buildTree :: String -> Tree
-buildTree formula = head $ foldl pmatcher [] $ reverse $ words $ formula
+buildTree formula = head $ Prelude.foldl pmatcher [] $ reverse $ words $ formula
     where pmatcher(x:y:ys) "^" = (DBranch{op = "^", eval = True, left = x, right = y}):ys
           pmatcher(x:y:ys) "v" = (DBranch{op = "v", eval = True, left = x, right = y}):ys
           pmatcher(x:y:ys) "->" = (DBranch{op = "->", eval = True, left = x, right = y}):ys
@@ -33,6 +34,16 @@ fTree tree
 --branchList tree
 
 --evalBranches :: Tree -> IO ()
+avaliar :: Tree->String
+avaliar t  
+    | list !! ((opr `elem` list)+1) == not (eval t) = "Contradição" 
+    | (opr == "^" ) && ((eval t) == False) = (avaliar (left t))++(avaliar (right t))
+    | (opr == "^" ) && ((eval t) == True) = (avaliar t)
+    | (opr == "v" ) && ((eval t) == False) = (avaliar t)
+    | (opr == "v" ) && ((eval t) == True) = (avaliar t)++(avaliar t)
+    | (opr == "->" ) && ((eval t) == False) = (avaliar t)
+    where opr = op t 
+          list = []
 
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
