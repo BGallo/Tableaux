@@ -51,6 +51,7 @@ avaliar t lista
     | (opr == "->" ) && ((eval t) == True) = (avaliar (right t) lista)++(avaliar (right t) lista)
     | (opr == "~") && ((eval t )== False) = (avaliar (left t) [])
     | (opr == "~") && ((eval t )== True) = (avaliar (left t) lista)
+    | otherwise =  (treeToStr t 1)
     where opr = op t 
 
 treeToStr :: Tree -> Int -> String
