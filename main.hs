@@ -33,16 +33,24 @@ fTree tree
 
 --branchList :: Tree -> [Tree]
 --branchList tree
+boolToString :: Bool -> String
+boolToString True = "TRUE"
+boolToString False = "FALSE"
 
 --evalBranches :: Tree -> IO ()
 avaliar :: Tree->[String]->String
 avaliar t lista  
-    | lista !! ((opr `elemIndex` lista)+1) == not (eval t) = "Contradição" 
+    |(( ( case opr `elemIndex` lista of 
+        Just n ->  lista !! (n+1)
+        maybe -> ""))) == boolToString (not (eval t)) = "Contradição" 
     | (opr == "^" ) && ((eval t) == False) = (avaliar (left t) [])++(avaliar (right t) [])
-    | (opr == "^" ) && ((eval t) == True) = (avaliar t lista) ++ (avaliar t lista)
-    | (opr == "v" ) && ((eval t) == False) = (avaliar t lista) ++ (avaliar t lista)
-    | (opr == "v" ) && ((eval t) == True) = (avaliar t [])++(avaliar t [])
-    | (opr == "->" ) && ((eval t) == False) = (avaliar t lista)
+    | (opr == "^" ) && ((eval t) == True) = (avaliar (left t) lista) ++ (avaliar (right t) lista)
+    | (opr == "v" ) && ((eval t) == False) = (avaliar (left t) lista) ++ (avaliar (right t) lista)
+    | (opr == "v" ) && ((eval t) == True) = (avaliar (left t) [])++(avaliar (right t) [])
+    | (opr == "->" ) && ((eval t) == False) = (avaliar (left t) [])++(avaliar (right t) [])
+    | (opr == "->" ) && ((eval t) == True) = (avaliar (right t) lista)++(avaliar (right t) lista)
+    | (opr == "~") && ((eval t )== False) = (avaliar (left t) [])
+    | (opr == "~") && ((eval t )== True) = (avaliar (left t) lista)
     where opr = op t 
 
 treeToStr :: Tree -> Int -> String
@@ -60,4 +68,4 @@ evalFormula formula = putStr $ treeToStr (fTree $ buildTree formula) 1
 main = do
     formula <- getLine
     print(fTree $ buildTree formula)
-    evalFormula formula
+    
