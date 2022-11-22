@@ -51,7 +51,7 @@ avaliar t lista
     where opr = op t 
 
 idk :: String -> [String]
-idk str = removeall "\n" $ removeall ":" $ words str
+idk str = removeall "-" $ removeall "\n" $ removeall ":" $ words str
     where removeall val list = [ x | x <- list, x /= val ]
 
 pUtil :: String -> String -> Map String String-> Map String String
@@ -60,7 +60,6 @@ pUtil x y z = Data.Map.insert x y z
 aParser :: [String] -> Map String String-> String
 aParser x y 
     | (Data.List.length x == 0) = "" 
-    | ((Data.List.length x  /= 2 ) == False) = " A formula e valida \n " 
     | ((member (head x) y)  && not ( y Data.Map.! (head x) == (x!!2))) = " A formula e valida \n " 
     | otherwise =  aParser (Data.List.drop 2 x)  (Data.Map.insert (head x) (x !! 2)  y)
 
@@ -103,5 +102,4 @@ main = do
     let result = avaliar fArvore []
     let aux = idk result
     let b = aParser aux (empty)
-    putStrLn $ "Fórmula entrada: " ++ treeToInfix arvore
-    if b == "" then putStrLn result else  (putStrLn $ "A formula é valida. \n" ++ (treeToStr  fArvore 1) ) 
+    if b == "" then putStrLn result else  (putStrLn $ "A formula é valida. \n" ++ (treeToInfix arvore) ++ (treeToStr  fArvore 1) ) 
