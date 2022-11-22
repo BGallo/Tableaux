@@ -82,11 +82,24 @@ treeToInfix tree
     | otherwise = opr
     where opr = op tree
 
+--multiLineInfixTree :: Tree -> Int -> IO()
+--multiLineInfixTree tree count = do
+--    if isop then putStrLn $ not ++ "(" ++ treeToInfix tree ++ ") (" ++ show count ++ ")"  else putStrLn $ not ++ treeToInfix tree ++ " (" ++ show count ++ ")"
+--    if opr == "^" || opr == "v" || opr == "->" then do
+--        multiLineInfixTree (left tree) (count + 1)
+--        multiLineInfixTree (right tree) (count + 1)
+--    else if opr == "~" then multiLineInfixTree (left tree) (count + 1)
+--    else return()
+--    where opr = op tree
+--          val = eval tree
+--          isop = opr == "^" || opr == "v" || opr == "->"
+--          not = if val then "" else "~ "
+
 treeToStr :: Tree -> Int -> String
 treeToStr tree count
-    | opr == "->" = replicate count '-' ++ " " ++ opr ++ ": " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3) ++ right tree `treeToStr` (count + 3)
-    | opr == "^" || opr == "v" = replicate count '-' ++ " " ++ opr ++ " : " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3) ++ right tree `treeToStr` (count + 3)
-    | opr == "~" = replicate count '-' ++ " " ++ opr ++ " : " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3)
+    | opr == "->" = replicate count '-' ++ " " ++ treeToInfix tree ++ ": " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3) ++ right tree `treeToStr` (count + 3)
+    | opr == "^" || opr == "v" = replicate count '-' ++ " " ++ treeToInfix tree ++ " : " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3) ++ right tree `treeToStr` (count + 3)
+    | opr == "~" = replicate count '-' ++ " " ++ treeToInfix tree ++ " : " ++ show ev ++ "\n" ++  left tree `treeToStr` (count + 3)
     | otherwise = replicate count '-' ++ " " ++ opr ++ " : " ++ show ev ++ "\n"
     where opr = op tree
           ev = eval tree
@@ -102,4 +115,6 @@ main = do
     let result = avaliar fArvore []
     let aux = idk result
     let b = aParser aux (empty)
-    if b == "" then putStrLn result else  (putStrLn $ "A formula é valida. \n" ++ (treeToInfix arvore) ++ (treeToStr  fArvore 1) ) 
+    putStrLn $ "Fórmula entrada (infixo): " ++ treeToInfix arvore
+    --multiLineInfixTree fArvore 0
+    if b == "" then putStrLn $ "A fórmula é inválida. Contra-exemplo: " ++ result else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
