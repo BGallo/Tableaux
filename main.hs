@@ -30,6 +30,19 @@ fTree tree
     | otherwise = tree{eval = False}
     where opr = op tree
 
+funcao :: Tree -> [Tree] -> [Tree]
+funcao tree arr
+    | (opr == "^" ) && ((eval tree) == False) = arr ++ (left tree) `funcao` (arr)
+    | (opr == "^" ) && ((eval tree) == True) = (funcao (left tree) arr) ++ (funcao (right tree) arr)
+    | (opr == "v" ) && ((eval tree) == False) = (funcao (left tree) arr) ++ (funcao (right tree) arr)
+    | (opr == "v" ) && ((eval tree) == True) = (funcao (left tree) arr) ++(funcao (right tree) arr)
+    | (opr == "->" ) && ((eval tree) == False) = (funcao (left tree) arr) ++ (funcao (right tree) arr)
+    | (opr == "->" ) && ((eval tree) == True) = (funcao (right tree) arr) ++(funcao (right tree) arr)
+    | (opr == "~") && ((eval tree )== False) = (funcao (left tree) arr)
+    | (opr == "~") && ((eval tree )== True) = (funcao (left tree) arr)
+    | otherwise = tree
+    where opr = op tree
+
 boolToString :: Bool -> String
 boolToString True = "TRUE"
 boolToString False = "FALSE"
@@ -115,6 +128,6 @@ main = do
     let result = avaliar fArvore []
     let aux = idk result
     let b = aParser aux (empty)
-    putStrLn $ "Fórmula entrada (infixo): " ++ treeToInfix arvore
+    putStrLn $ "Fórmula entrada: " ++ treeToInfix arvore
     --multiLineInfixTree fArvore 0
-    if b == "" then putStrLn $ "A fórmula é inválida. Contra-exemplo: " ++ result else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
+    if b == "" then putStrLn $ "A fórmula é inválida. Contra-exemplo: \n" ++ result else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
