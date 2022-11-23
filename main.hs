@@ -120,21 +120,21 @@ treeToStr tree count
 evalFormula :: String -> IO()
 evalFormula formula = putStr $ treeToStr (fTree $ buildTree formula) 1
 
-parMap :: [[String]]->[String]
-parMap l
-    | Data.List.null l =[] 
-    | otherwise =  []
+multiParser :: [[String]] -> [String]
+multiParser (x:xs) = aParser x empty : multiParser xs
+multiParser list = []
 main = do
     formula <- getLine
     let arvore= buildTree formula
     let fArvore = fTree arvore
-    let primo = head (funcao fArvore []) 
-    let b = avaliar (headprimo) 
-    --let listaLista = Data.List.map idk (xpto (funcao fArvore []))
-    --let b = (Data.List.map . Data.List.map) . aParser 
-    print()
+    let primo = head (funcao fArvore [])
+    let listaLista = Data.List.map idk (xpto (funcao fArvore []))
+    
+    --let aux = Data.List.map treeToStr primo
+    let b = multiParser listaLista
     --let aux = idk result
     --let b = aParser aux (empty)
-    
+    --putStrLn ( treeToStr (head primo) 1)
     --multiLineInfixTree fArvore 0
-    --if b == "" then putStrLn $ "A fórmula é inválida. Contra-exemplo: \n" ++ result else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
+    if (elem "" b) then putStrLn $ "A fórmula é inválida. Contra-exemplo: \n" ++ (treeToStr fArvore 1 ) else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
+    
