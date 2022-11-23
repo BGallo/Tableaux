@@ -47,19 +47,19 @@ boolToString :: Bool -> String
 boolToString True = "TRUE"
 boolToString False = "FALSE"
 
-avaliar :: Tree->[String]->String
-avaliar t lista  
-    |(( ( case opr `elemIndex` lista of 
-        Just n ->  lista !! (n+1)
-        maybe -> ""))) == boolToString (not (eval t)) = "Contradição" 
-    | (opr == "^" ) && ((eval t) == False) = (avaliar (left t) []) ++ " "++(avaliar (right t) [])
-    | (opr == "^" ) && ((eval t) == True) = (avaliar (left t) lista) ++ " "++ (avaliar (right t) lista)
-    | (opr == "v" ) && ((eval t) == False) = (avaliar (left t) lista) ++ " "++ (avaliar (right t) lista)
-    | (opr == "v" ) && ((eval t) == True) = (avaliar (left t) [])++ " "++(avaliar (right t) [])
-    | (opr == "->" ) && ((eval t) == False) = (avaliar (left t) [])++ " "++(avaliar (right t) [])
-    | (opr == "->" ) && ((eval t) == True) = (avaliar (right t) lista)++ " "++(avaliar (right t) lista)
-    | (opr == "~") && ((eval t )== False) = " " ++(avaliar (left t) [])
-    | (opr == "~") && ((eval t )== True) = " " ++ (avaliar (left t) lista)
+xpto::[[Tree]]->[String]
+xpto t = Data.List.map avaliar (Data.List.map head t)
+
+avaliar :: Tree->String
+avaliar t   
+    | (opr == "^" ) && ((eval t) == False) = (avaliar (left t) ) ++ " "++(avaliar (right t) )
+    | (opr == "^" ) && ((eval t) == True) = (avaliar (left t) ) ++ " "++ (avaliar (right t) )
+    | (opr == "v" ) && ((eval t) == False) = (avaliar (left t)) ++ " "++ (avaliar (right t) )
+    | (opr == "v" ) && ((eval t) == True) = (avaliar (left t) )++ " "++(avaliar (right t) )
+    | (opr == "->" ) && ((eval t) == False) = (avaliar (left t) )++ " "++(avaliar (right t) )
+    | (opr == "->" ) && ((eval t) == True) = (avaliar (right t) )++ " "++(avaliar (right t) )
+    | (opr == "~") && ((eval t )== False) = " " ++(avaliar (left t) )
+    | (opr == "~") && ((eval t )== True) = " " ++ (avaliar (left t) )
     | otherwise = " " ++ (treeToStr t 1)
     where opr = op t 
 
@@ -120,13 +120,19 @@ treeToStr tree count
 evalFormula :: String -> IO()
 evalFormula formula = putStr $ treeToStr (fTree $ buildTree formula) 1
 
+parMap :: [[String]]->[String]
+parMap l
+    | Data.List.null l =[] 
+    | otherwise =  []
 main = do
     formula <- getLine
     let arvore= buildTree formula
     let fArvore = fTree arvore
-   
-    let result = funcao fArvore []
-    putStrLn $ treeToStr  (head(head(result)))  1
+    let primo = head (funcao fArvore []) 
+    let b = avaliar (headprimo) 
+    --let listaLista = Data.List.map idk (xpto (funcao fArvore []))
+    --let b = (Data.List.map . Data.List.map) . aParser 
+    print()
     --let aux = idk result
     --let b = aParser aux (empty)
     
