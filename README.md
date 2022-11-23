@@ -32,6 +32,6 @@ Sistema de Tableaux para a Lógica Clássica Proposicional em linguagem funciona
 | Não  | ~  |
 
 - Exemplos de fórmulas:
-    1. `-> v p ^ q r ^ v p q v p r`
-    2. `-> a -> a -> b a`
-    3. `-> b ^ a v b a`
+    1. `-> a b`
+    2. `-> v a b v b ~ a`
+    3. `v ^ a b ^ a b`
