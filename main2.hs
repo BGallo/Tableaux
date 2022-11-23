@@ -104,15 +104,14 @@ aUtil :: Formula -> Map String String ->String
 aUtil x y
     |  ((member (op x) y)  && not ( y Data.Map.! (op  x) == (if (op   x == "~") then "FALSE" else "TRUE") )) =  " A tem contradicao \n "
     | (op (x)) == "~" =  "" ++ aUtil (child x)  (Data.Map.insert (op (child  x)) ((if (op  x == "~") then "FALSE" else "TRUE"))  y)
-    |(op x == "v") ||(op x == "^") ||(op x == "->") = ""++ aUtil (left x) y ++ aUtil (right x) y
+    |(op x == "v") ||(op x == "^") ||(op x == "->") = ""++ aUtil (left x) (Data.Map.insert (op( left x)) (((if (op  x == "~") then "FALSE" else "TRUE")))y) ++ aUtil (right x)(Data.Map.insert (op( right x)) (((if (op  x == "~") then "FALSE" else "TRUE")))y)
     | otherwise = ""
 
 aParser :: [Formula] -> Map String String-> String
-aParser x y
-    | (Data.List.length x == 0) = ""
-    | ((member (op (head x)) y)  && not ( y Data.Map.! (op (head x)) == (if (op (head  x) == "~") then "FALSE" else "TRUE") )) =  " A tem contradicao \n "
+aParser x y 
+    | (Data.List.length x == 0) = "" 
+    | ((member (op (head x)) y)  && not ( y Data.Map.! (op (head x)) == (if (op (head  x) == "~") then "FALSE" else "TRUE") )) =  " A tem contradicao \n " 
     | (op (head x)) == "~" =  "" ++ aParser (Data.List.drop 1 x)  (Data.Map.insert (op (child (head x))) ((if (op (head  x) == "~") then "FALSE" else "TRUE"))  y)
-    | (op (head x)) == "v" || (op (head x)) == "^" || (op (head x)) == "->" =""++ aUtil (left (head x)) y ++ aUtil (right (head x)) y
     | otherwise = ""++ aParser (Data.List.drop 1 x)  (Data.Map.insert (op (head x)) ((if (op (head  x) == "~") then "FALSE" else "TRUE"))  y)
 
 avaliar :: Tree->String
@@ -177,5 +176,4 @@ main = do
     let concattedBranches = if length groupedSorted > 1 then Data.List.map (head groupedSorted ++) (tail groupedSorted) else groupedSorted
     let findings = multiParser concattedBranches
     putStrLn $ "Fórmula entrada: " ++ printFormula builtFormula
-    putStrLn $ betterPrintFormulas concattedBranches
     if parseCheck findings then putStrLn $ "A fórmula é inválida. Contra-modelo:\n" ++ avaliar (fTree $ buildTree $ formula) else putStrLn $ "A fórmula é válida! Ramos calculados:\n" ++ betterPrintFormulas concattedBranches

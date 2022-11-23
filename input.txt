@@ -1,3 +1,8 @@
--> v p ^ q r ^ v p q v p r
-
--> v a b v b ~ a
+-> a b
+-> v a b v a b
+v ^ a b ^ c d
+~ ^ a b
+^ a ~ a
+v ~ a v a ~ a
+~ ~ ^ a ^ a ~ b
+~ ^ ^ a b ^ c b
