@@ -1,1 +1,3 @@
 -> v p ^ q r ^ v p q v p r
+
+-> v a b v b ~ a

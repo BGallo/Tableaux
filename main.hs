@@ -30,17 +30,17 @@ fTree tree
     | otherwise = tree{eval = False}
     where opr = op tree
 
-funcao :: Tree -> [Tree] -> [Tree]
+funcao :: Tree -> [[Tree]] -> [[Tree]]
 funcao tree arr
-    | (opr == "^" ) && ((eval tree) == False) = arr ++ (left tree) `funcao` (arr)
-    | (opr == "^" ) && ((eval tree) == True) = (funcao (left tree) arr) ++ (funcao (right tree) arr)
-    | (opr == "v" ) && ((eval tree) == False) = (funcao (left tree) arr) ++ (funcao (right tree) arr)
-    | (opr == "v" ) && ((eval tree) == True) = (funcao (left tree) arr) ++(funcao (right tree) arr)
-    | (opr == "->" ) && ((eval tree) == False) = (funcao (left tree) arr) ++ (funcao (right tree) arr)
-    | (opr == "->" ) && ((eval tree) == True) = (funcao (right tree) arr) ++(funcao (right tree) arr)
-    | (opr == "~") && ((eval tree )== False) = (funcao (left tree) arr)
-    | (opr == "~") && ((eval tree )== True) = (funcao (left tree) arr)
-    | otherwise = tree
+    | (opr == "^" ) && ((eval tree) == False) = arr ++ ([[tree]]++ (left tree) `funcao` ([]) ++ ( [[tree]]++ funcao (right tree) []))
+    | (opr == "^" ) && ((eval tree) == True) = arr ++ [[tree]]++(  funcao (left tree) arr) ++ (  funcao (right tree) arr)
+    | (opr == "v" ) && ((eval tree) == False) =arr ++  ([[tree]]++funcao (left tree) arr) ++ ([[tree]]++funcao (right tree) arr)
+    | (opr == "v" ) && ((eval tree) == True) =arr ++ [[tree]]++ (funcao (left tree) []) ++(funcao (right tree) [])
+    | (opr == "->" ) && ((eval tree) == False) =arr ++[[tree]]++  (funcao (left tree) arr) ++ (funcao (right tree) arr)
+    | (opr == "->" ) && ((eval tree) == True) =arr ++  ([[tree]]++funcao (right tree) []) ++([[tree]]++funcao (right tree) [])
+    | (opr == "~") && ((eval tree )== False) =arr ++ [[tree]]++ (funcao (left tree) arr)
+    | (opr == "~") && ((eval tree )== True) =arr ++ [[tree]]++ (funcao (left tree) arr)
+    | otherwise =arr ++   [[tree]]
     where opr = op tree
 
 boolToString :: Bool -> String
@@ -125,9 +125,10 @@ main = do
     let arvore= buildTree formula
     let fArvore = fTree arvore
    
-    let result = avaliar fArvore []
-    let aux = idk result
-    let b = aParser aux (empty)
-    putStrLn $ "Fórmula entrada: " ++ treeToInfix arvore
+    let result = funcao fArvore []
+    putStrLn $ treeToStr  (head(head(result)))  1
+    --let aux = idk result
+    --let b = aParser aux (empty)
+    
     --multiLineInfixTree fArvore 0
-    if b == "" then putStrLn $ "A fórmula é inválida. Contra-exemplo: \n" ++ result else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
+    --if b == "" then putStrLn $ "A fórmula é inválida. Contra-exemplo: \n" ++ result else  (putStrLn $ "A fórmula é válida. \n" ++ (treeToStr  fArvore 1) ) 
